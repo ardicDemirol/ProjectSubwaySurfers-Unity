@@ -23809,7 +23809,6 @@ GameObject:
   - component: {fileID: 3201010808227554648}
   - component: {fileID: 3256170705771693174}
   - component: {fileID: 3256170705771693176}
-  - component: {fileID: 3256170705771693177}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -25473,24 +25472,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveDirection: 0
   moveSpeed: 3
---- !u!143 &3256170705771693177
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3197955108042521276}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.3
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!137 &3280183378325596742
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
