@@ -11,10 +11,7 @@ public class MoveForward : MonoBehaviour
 
     public Direction MoveDirection;
 
-
     [SerializeField] private float moveSpeed = 5f;
-
-    private float _normalMoveSpeed;
 
     private Vector3 _moveDirectionVector;
 
@@ -24,8 +21,6 @@ public class MoveForward : MonoBehaviour
 
     private void Start()
     {
-        _normalMoveSpeed = moveSpeed;
-
         switch (MoveDirection)
         {
             case Direction.Forward:
@@ -43,14 +38,20 @@ public class MoveForward : MonoBehaviour
     }
     private void OnDisable() => UnSubscribeEvents();
 
+
     public void SubscribeEvents()
     {
-
+        Signals.Instance.OnPlayerDie += OnPlayerDie;
     }
 
     public void UnSubscribeEvents()
     {
+        Signals.Instance.OnPlayerDie -= OnPlayerDie;
+    }
 
+    private void OnPlayerDie()
+    {
+        moveSpeed = 0;
     }
 
 }

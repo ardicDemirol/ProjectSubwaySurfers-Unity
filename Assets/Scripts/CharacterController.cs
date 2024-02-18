@@ -26,7 +26,7 @@ public class CharacterController : MonoBehaviour
     private CapsuleCollider _collider;
     private Renderer[] _renderer;
 
-    private WaitForSeconds _waitForOneHalfSeconds = new(1.5f);
+    private static readonly WaitForSeconds _waitForOneHalfSeconds = new(1.5f);
     private IEnumerator _slideTimer;
 
     private bool _canJump = true;
@@ -47,11 +47,6 @@ public class CharacterController : MonoBehaviour
         _renderer = GetComponentsInChildren<Renderer>();
     }
 
-    private void Start()
-    {
-
-    }
-
     private void Update()
     {
         GetInput();
@@ -61,13 +56,16 @@ public class CharacterController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.gameObject.CompareTag("Obstacle") && _canDamage)
         {
             Debug.Log("Player collided with " + other.gameObject.name);
             _canDamage = false;
             HealthController();
             FadeController();
+        }
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            other.gameObject.SetActive(false);
         }
     }
 
@@ -76,12 +74,10 @@ public class CharacterController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //Debug.Log("Player collided with " + collision.gameObject.name);
-
         if (collision.gameObject.CompareTag("Ground"))
         {
             _canJump = true;
             _animator.ResetTrigger(_animatorHashIsJump);
-
         }
     }
 
@@ -92,7 +88,7 @@ public class CharacterController : MonoBehaviour
             _canJump = false;
             _animator.SetTrigger(_animatorHashIsJump);
 
-            transform.DOMoveY(jumpForce, 1 / jumpSpeed);
+            transform.DOMoveY(transform.position.y + jumpForce, 1 / jumpSpeed);
 
         }
         else if (Input.GetKeyDown(KeyCode.S) && _canSlide)
@@ -136,11 +132,11 @@ public class CharacterController : MonoBehaviour
     void HealthController()
     {
         playerHealth--;
+        Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
         if (playerHealth <= 0)
         {
             _animator.SetTrigger(_animatorHashIsDie);
-
-            //Destroy(gameObject, 1f);
+            Signals.Instance.OnPlayerDie?.Invoke();
         }
     }
 
@@ -149,8 +145,6 @@ public class CharacterController : MonoBehaviour
     {
         foreach (var _renderer in _renderer)
             _renderer.material.DOFade(0, 0.2f).OnComplete(() => _renderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() => _canDamage = true);
-
-        //_renderer.material.DOFade(0, 0.2f).OnComplete(() => _renderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() => _canDamage = true);
     }
 
 
