@@ -12,7 +12,7 @@ public class MoveForward : MonoBehaviour
     public Direction MoveDirection;
 
 
-    [SerializeField] private float moveSpeed = 8f;
+    [SerializeField] private float moveSpeed = 5f;
 
     private float _normalMoveSpeed;
 
@@ -38,6 +38,7 @@ public class MoveForward : MonoBehaviour
     }
     private void Update()
     {
+        moveSpeed += Time.deltaTime * 0.015f;
         transform.position += _moveDirectionVector * (moveSpeed * Time.deltaTime);
     }
     private void OnDisable() => UnSubscribeEvents();
