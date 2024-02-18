@@ -52,8 +52,6 @@ public class CharacterController : MonoBehaviour
         GetInput();
     }
 
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Obstacle") && _canDamage)
@@ -66,7 +64,13 @@ public class CharacterController : MonoBehaviour
         if (other.gameObject.CompareTag("Coin"))
         {
             other.gameObject.SetActive(false);
+            Signals.Instance.OnCoinCollected?.Invoke();
         }
+        if (other.gameObject.CompareTag("PieceGenerator"))
+        {
+            Signals.Instance.OnGenerateLevel?.Invoke();
+        }
+
     }
 
 

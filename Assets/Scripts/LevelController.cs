@@ -1,18 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    [SerializeField] private GameObject[] pieces;
+    [SerializeField] private int zPos = 150;
+
+    private int _piecesIndex;
+
+    private void OnEnable() => SubscribeEvents();
+    private void OnDisable() => UnSubscribeEvents();
+
+    private void SubscribeEvents()
     {
-        
+        Signals.Instance.OnGenerateLevel += GenerateLevel;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void UnSubscribeEvents()
     {
-        
+        Signals.Instance.OnGenerateLevel -= GenerateLevel;
     }
+
+    private void GenerateLevel()
+    {
+        _piecesIndex = Random.Range(0, pieces.Length);
+        Instantiate(pieces[_piecesIndex], new Vector3(0, 0, zPos), Quaternion.identity);
+        zPos += 150;
+    }
+
 }

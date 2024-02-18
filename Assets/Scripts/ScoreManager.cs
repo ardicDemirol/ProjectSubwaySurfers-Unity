@@ -38,12 +38,19 @@ public class ScoreManager : MonoBehaviour
     {
         Signals.Instance.OnPlayerTakeDamage += PlayerTakeDamage;
         Signals.Instance.OnPlayerDie += ControlScore;
+        Signals.Instance.OnCoinCollected += CoinCollected;
     }
 
     private void UnSubscribeEvents()
     {
         Signals.Instance.OnPlayerTakeDamage -= PlayerTakeDamage;
         Signals.Instance.OnPlayerDie -= ControlScore;
+        Signals.Instance.OnCoinCollected -= CoinCollected;
+    }
+
+    private void CoinCollected()
+    {
+        _score += 200;
     }
 
     private void PlayerTakeDamage(short arg0)
