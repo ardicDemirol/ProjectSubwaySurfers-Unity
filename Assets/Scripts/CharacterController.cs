@@ -63,7 +63,7 @@ public class CharacterController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Coin"))
         {
-            other.gameObject.SetActive(false);
+            other.gameObject.GetComponent<MeshRenderer>().enabled = false;
             Signals.Instance.OnCoinCollected?.Invoke();
         }
         if (other.gameObject.CompareTag("PieceGenerator"))

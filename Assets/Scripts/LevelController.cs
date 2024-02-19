@@ -4,26 +4,28 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    [SerializeField] private Transform[] extrenePoints;
     [SerializeField] private GameObject[] pieces;
-    [SerializeField] private int zPos = 150;
 
     private GameObject _spawnObject;
-
     private Queue<GameObject> _pooledObjects;
-    private int _lastPieceIndex;
+
+    private float _tileDistance;
+    private float _zPos;
+
+    private int _lastIndex = -1;
+    private int _currentIndex;
+
 
     private void OnEnable() => SubscribeEvents();
 
     private void Awake()
     {
         SetPooledObject();
-    }
+        _tileDistance = Mathf.Abs(extrenePoints[0].position.z - extrenePoints[1].position.z);
+        _zPos = _tileDistance;
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space)){
-            GenerateLevel();
-        }
+        InvokeRepeating("GenerateLevel", 1f, 5f);
     }
 
     private void OnDisable() => UnSubscribeEvents();
@@ -40,9 +42,10 @@ public class LevelController : MonoBehaviour
 
     private void GenerateLevel()
     {
-        _spawnObject = GetPooledObject();
-        _spawnObject.transform.SetPositionAndRotation(new Vector3(0, 0, zPos), Quaternion.identity);
-        zPos += 150;
+
+        _spawnObject = GetRandomPooledObject();
+        _spawnObject.transform.SetPositionAndRotation(new Vector3(0, 0, _zPos), Quaternion.identity);
+        _zPos += _tileDistance;
     }
 
     private void SetPooledObject()
@@ -50,26 +53,25 @@ public class LevelController : MonoBehaviour
         _pooledObjects = new();
         foreach (GameObject piece in pieces)
         {
-            Instantiate(piece, transform);
             piece.SetActive(false);
             _pooledObjects.Enqueue(piece);
         }
     }
 
 
-    private GameObject GetPooledObject()
+    private GameObject GetRandomPooledObject()
     {
-        int index = Random.Range(0, _pooledObjects.Count);
-        _lastPieceIndex = index;
-
-        while(index == _lastPieceIndex)
-        {
-            index = Random.Range(0, _pooledObjects.Count);
-        }
+        // The same piece cannot be used twice in last 2 choice.
+        while (_currentIndex == _pooledObjects.Count - 1)
+            _currentIndex = Random.Range(0, _pooledObjects.Count);
+        
+        _lastIndex = _currentIndex;
 
         GameObject[] pooledArray = _pooledObjects.ToArray();
-        GameObject obj = pooledArray[index];
+        GameObject obj = pooledArray[_currentIndex];
 
+
+        if (_lastIndex != -1) pooledArray[pooledArray.Length - 1].SetActive(false);
         _pooledObjects = new Queue<GameObject>(_pooledObjects.ToArray().Where(item => item != obj));
         _pooledObjects.Enqueue(obj);
         obj.SetActive(true);
