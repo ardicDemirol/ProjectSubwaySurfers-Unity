@@ -56,7 +56,7 @@ public class CharacterController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Obstacle") && _canDamage)
         {
-            Debug.Log("Player collided with " + other.gameObject.name);
+            //Debug.Log("Player collided with " + other.gameObject.name);
             _canDamage = false;
             HealthController();
             FadeController();
