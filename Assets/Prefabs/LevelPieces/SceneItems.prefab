@@ -2055,6 +2055,7 @@ MonoBehaviour:
   rotationSpeed: 0.75
   moveSpeed: 0.1
   moveDistance: 30
+  initPos: {fileID: 6236777307984444171}
 --- !u!136 &6231527815492122787
 CapsuleCollider:
   m_ObjectHideFlags: 0

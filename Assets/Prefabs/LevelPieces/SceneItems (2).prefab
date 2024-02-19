@@ -100,6 +100,7 @@ MonoBehaviour:
   rotationSpeed: 0.75
   moveSpeed: 0.1
   moveDistance: 30
+  initPos: {fileID: 1202115120874734106}
 --- !u!136 &1178090664137834930
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -780,7 +781,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8488701610144591498
 Transform:
   m_ObjectHideFlags: 0

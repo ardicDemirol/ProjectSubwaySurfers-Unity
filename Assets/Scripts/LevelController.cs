@@ -16,17 +16,18 @@ public class LevelController : MonoBehaviour
     private int _lastIndex = -1;
     private int _currentIndex;
 
-
-    private void OnEnable() => SubscribeEvents();
-
     private void Awake()
     {
         SetPooledObject();
         _tileDistance = Mathf.Abs(extrenePoints[0].position.z - extrenePoints[1].position.z);
         _zPos = _tileDistance;
 
-        InvokeRepeating("GenerateLevel", 1f, 5f);
+        //InvokeRepeating("GenerateLevel", 1f, 5f);
     }
+
+    private void OnEnable() => SubscribeEvents();
+
+   
 
     private void OnDisable() => UnSubscribeEvents();
 
