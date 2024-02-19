@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour
@@ -9,13 +10,47 @@ public class LevelSpawner : MonoBehaviour
 
     [SerializeField] GameObject[] spawnObjects;
 
+    private int _spawnObjectsCount;
+    private int _spawnPointsCount;
+
+    private void Awake()
+    {
+        _spawnObjectsCount = spawnObjects.Length;
+        _spawnPointsCount = leftSpawnPoints.Length;
+    }
     void Start()
     {
-        Instantiate(spawnObjects[0], leftSpawnPoints[0].position, Quaternion.identity);
+        List<int> usedIndexes = new List<int>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            int randomIndex = GetUniqueRandomIndex(usedIndexes, _spawnPointsCount);
+
+            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], leftSpawnPoints[randomIndex].position, Quaternion.identity);
+            usedIndexes.Add(randomIndex);
+
+            randomIndex = GetUniqueRandomIndex(usedIndexes, _spawnPointsCount);
+            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], middleSpawnPoints[randomIndex].position, Quaternion.identity);
+            usedIndexes.Add(randomIndex);
+
+            randomIndex = GetUniqueRandomIndex(usedIndexes, _spawnPointsCount);
+            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], rightSpawnPoints[randomIndex].position, Quaternion.identity);
+            usedIndexes.Add(randomIndex);
+        }
     }
 
-    void Update()
+    int GetUniqueRandomIndex(List<int> usedIndexes, int range)
     {
-        
+        if (usedIndexes.Count >= range)
+        {
+            return -1;
+        }
+
+        int randomIndex = Random.Range(0, range);
+        while (usedIndexes.Contains(randomIndex))
+        {
+            randomIndex = Random.Range(0, range);
+        }
+        return randomIndex;
     }
 }
