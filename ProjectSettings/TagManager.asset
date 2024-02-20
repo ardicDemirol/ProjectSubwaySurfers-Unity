@@ -9,6 +9,9 @@ TagManager:
   - Obstacle
   - Coin
   - PieceGenerator
+  - ObstacleSide
+  - ObstacleRightSide
+  - ObstacleLeftSide
   layers:
   - Default
   - TransparentFX

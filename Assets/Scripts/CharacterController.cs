@@ -11,6 +11,7 @@ public class CharacterController : MonoBehaviour
         Middle
     }
 
+
     [SerializeField] private PlayerSide playerSide = PlayerSide.Middle;
 
     [SerializeField] private float jumpForce = 4f;
@@ -76,9 +77,8 @@ public class CharacterController : MonoBehaviour
         {
             Signals.Instance.OnGenerateLevel?.Invoke();
         }
+       
     }
-
-
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -87,6 +87,32 @@ public class CharacterController : MonoBehaviour
         {
             _canJump = true;
             _animator.ResetTrigger(_animatorHashIsJump);
+        }
+        if (collision.gameObject.CompareTag("ObstacleLeftSide"))
+        {
+            if (playerSide == PlayerSide.Middle)
+            {
+                playerSide = PlayerSide.Left;
+                transform.DOMoveX(1, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+            }
+            else if (playerSide == PlayerSide.Right)
+            {
+                playerSide = PlayerSide.Middle;
+                transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+            }
+        }
+        if (collision.gameObject.CompareTag("ObstacleRightSide"))
+        {
+            if (playerSide == PlayerSide.Middle)
+            {
+                playerSide = PlayerSide.Right;
+                transform.DOMoveX(5, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+            }
+            else if (playerSide == PlayerSide.Left)
+            {
+                playerSide = PlayerSide.Middle;
+                transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+            }
         }
     }
 
