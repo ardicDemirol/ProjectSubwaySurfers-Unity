@@ -1,14 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private Transform[] extrenePoints;
     [SerializeField] private GameObject levelTemplate;
-    [SerializeField] private short templateCount;
     [SerializeField] private Transform levelParent;
-
+    [SerializeField] private short templateCount;
 
 
     private GameObject _spawnObject;
@@ -21,7 +18,6 @@ public class LevelController : MonoBehaviour
 
     private void Awake()
     {
-        //_tileDistance = Mathf.Abs(extrenePoints[0].position.z - extrenePoints[1].position.z);
         _tileDistance = 100;
     }
 
