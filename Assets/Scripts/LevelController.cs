@@ -5,29 +5,33 @@ using UnityEngine;
 public class LevelController : MonoBehaviour
 {
     [SerializeField] private Transform[] extrenePoints;
-    [SerializeField] private GameObject[] pieces;
+    [SerializeField] private GameObject levelTemplate;
+    [SerializeField] private short templateCount;
+    [SerializeField] private Transform levelParent;
+
+
 
     private GameObject _spawnObject;
-    private Queue<GameObject> _pooledObjects;
+    private Queue<GameObject> _pooledObjects = new();
 
     private float _tileDistance;
     private float _zPos;
 
-    private int _lastIndex = -1;
-    private int _currentIndex;
+    private int _pieceCount;
 
     private void Awake()
     {
-        SetPooledObject();
-        _tileDistance = Mathf.Abs(extrenePoints[0].position.z - extrenePoints[1].position.z);
-        _zPos = _tileDistance;
+        //_tileDistance = Mathf.Abs(extrenePoints[0].position.z - extrenePoints[1].position.z);
+        _tileDistance = 100;
+    }
 
-        //InvokeRepeating("GenerateLevel", 1f, 5f);
+    private void Start()
+    {
+        SetPooledObject();
+        GenerateLevel();
     }
 
     private void OnEnable() => SubscribeEvents();
-
-   
 
     private void OnDisable() => UnSubscribeEvents();
 
@@ -43,39 +47,31 @@ public class LevelController : MonoBehaviour
 
     private void GenerateLevel()
     {
-
-        _spawnObject = GetRandomPooledObject();
+        if(_pieceCount < 3) _pieceCount++;
+        _spawnObject = GetPooledObject();
         _spawnObject.transform.SetPositionAndRotation(new Vector3(0, 0, _zPos), Quaternion.identity);
         _zPos += _tileDistance;
     }
 
     private void SetPooledObject()
     {
-        _pooledObjects = new();
-        foreach (GameObject piece in pieces)
+        for (int i = 0; i < templateCount; i++)
         {
-            piece.SetActive(false);
-            _pooledObjects.Enqueue(piece);
+            GameObject newObj = Instantiate(levelTemplate);
+            levelTemplate.SetActive(false);
+            _pooledObjects.Enqueue(newObj);
         }
     }
 
 
-    private GameObject GetRandomPooledObject()
+    private GameObject GetPooledObject()
     {
-        // The same piece cannot be used twice in last 2 choice.
-        while (_currentIndex == _pooledObjects.Count - 1)
-            _currentIndex = Random.Range(0, _pooledObjects.Count);
-        
-        _lastIndex = _currentIndex;
+        GameObject obj = _pooledObjects.Dequeue();
+        obj.SetActive(true);
+        _pooledObjects.Enqueue(obj);
 
         GameObject[] pooledArray = _pooledObjects.ToArray();
-        GameObject obj = pooledArray[_currentIndex];
-
-
-        if (_lastIndex != -1) pooledArray[pooledArray.Length - 1].SetActive(false);
-        _pooledObjects = new Queue<GameObject>(_pooledObjects.ToArray().Where(item => item != obj));
-        _pooledObjects.Enqueue(obj);
-        obj.SetActive(true);
+        if (_pieceCount == 3) pooledArray[0].SetActive(false);
 
         return obj;
 

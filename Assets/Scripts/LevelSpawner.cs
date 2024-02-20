@@ -20,31 +20,28 @@ public class LevelSpawner : MonoBehaviour
     }
     void Start()
     {
-        List<int> usedIndexes = new List<int>();
+        List<int> usedIndexes = new();
 
         for (int i = 0; i < 5; i++)
         {
             int randomIndex = GetUniqueRandomIndex(usedIndexes, _spawnPointsCount);
 
-            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], leftSpawnPoints[randomIndex].position, Quaternion.identity);
+            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], leftSpawnPoints[randomIndex].position, Quaternion.identity, leftSpawnPoints[randomIndex]);
             usedIndexes.Add(randomIndex);
 
             randomIndex = GetUniqueRandomIndex(usedIndexes, _spawnPointsCount);
-            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], middleSpawnPoints[randomIndex].position, Quaternion.identity);
+            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], middleSpawnPoints[randomIndex].position, Quaternion.identity, middleSpawnPoints[randomIndex]);
             usedIndexes.Add(randomIndex);
 
             randomIndex = GetUniqueRandomIndex(usedIndexes, _spawnPointsCount);
-            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], rightSpawnPoints[randomIndex].position, Quaternion.identity);
+            Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], rightSpawnPoints[randomIndex].position, Quaternion.identity, rightSpawnPoints[randomIndex]);
             usedIndexes.Add(randomIndex);
         }
     }
 
     int GetUniqueRandomIndex(List<int> usedIndexes, int range)
     {
-        if (usedIndexes.Count >= range)
-        {
-            return -1;
-        }
+        if (usedIndexes.Count >= range) return -1;
 
         int randomIndex = Random.Range(0, range);
         while (usedIndexes.Contains(randomIndex))

@@ -33,6 +33,7 @@ public class CharacterController : MonoBehaviour
     private bool _canSlide = true;
     private bool _canDamage = true;
     private bool _isMoveComplete = true;
+    private bool _isPlayerDead;
 
 
     private static readonly int _animatorHashIsJump = Animator.StringToHash("isJumping");
@@ -46,9 +47,14 @@ public class CharacterController : MonoBehaviour
         _collider = GetComponent<CapsuleCollider>();
         _renderer = GetComponentsInChildren<Renderer>();
     }
+    private void Start()
+    {
+        Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
+    }
 
     private void Update()
     {
+        if (_isPlayerDead) return;
         GetInput();
     }
 
@@ -70,7 +76,6 @@ public class CharacterController : MonoBehaviour
         {
             Signals.Instance.OnGenerateLevel?.Invoke();
         }
-
     }
 
 
@@ -139,6 +144,7 @@ public class CharacterController : MonoBehaviour
         Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
         if (playerHealth <= 0)
         {
+            _isPlayerDead = true;
             _animator.SetTrigger(_animatorHashIsDie);
             Signals.Instance.OnPlayerDie?.Invoke();
         }

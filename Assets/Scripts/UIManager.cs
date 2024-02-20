@@ -2,7 +2,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI healthText; 
@@ -12,12 +12,16 @@ public class ScoreManager : MonoBehaviour
 
     private bool _isPlayerDead;
 
-    private void OnEnable() => SubscribeEvents();
+    private void OnEnable()
+    {
+        SubscribeEvents();
+    }
 
     private void Awake()
     {
         _maxScore = PlayerPrefs.GetFloat("Score",0f);
-        healthText.text = "Health: " + 3;
+        //healthText.text = "Health: " + 3;
+      
     }
     private void Update()
     {

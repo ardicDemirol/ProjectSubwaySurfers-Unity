@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSide: 2
   jumpForce: 2.5
-  moveDistance: 3
+  moveDistance: 2
   slideSpeed: 2
   jumpSpeed: 2
   playerHealth: 1
