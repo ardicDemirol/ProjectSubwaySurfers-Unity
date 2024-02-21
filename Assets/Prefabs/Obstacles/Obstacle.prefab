@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8268998474258731207}
   - component: {fileID: 6721785914971627220}
   m_Layer: 0
-  m_Name: Box
+  m_Name: Obstacle
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
 
         if (_score > _maxScore) scoreText.color = Color.yellow;
 
-        _score += Time.deltaTime * 10;
+        _score += Time.deltaTime * 5f;
 
         StringBuilder stringBuilder = new();
         stringBuilder.Append("Score: " + (int)_score);
@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour
 
     private void CoinCollected()
     {
-        _score += 200;
+        _score += 75;
     }
 
     private void PlayerTakeDamage(short arg0)

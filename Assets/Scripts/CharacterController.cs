@@ -11,7 +11,6 @@ public class CharacterController : MonoBehaviour
         Middle
     }
 
-
     [SerializeField] private PlayerSide playerSide = PlayerSide.Middle;
 
     [SerializeField] private float jumpForce = 4f;
@@ -21,9 +20,7 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField] private short playerHealth = 3;
 
-
     private Animator _animator;
-    private Rigidbody _rb;
     private CapsuleCollider _collider;
     private Renderer[] _renderer;
 
@@ -44,7 +41,6 @@ public class CharacterController : MonoBehaviour
 
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _collider = GetComponent<CapsuleCollider>();
         _renderer = GetComponentsInChildren<Renderer>();
@@ -83,7 +79,6 @@ public class CharacterController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log("Player collided with " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Ground"))
         {
             _canJump = true;
