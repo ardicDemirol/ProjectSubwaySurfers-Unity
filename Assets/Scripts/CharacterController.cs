@@ -35,6 +35,7 @@ public class CharacterController : MonoBehaviour
     private bool _canDamage = true;
     private bool _isMoveComplete = true;
     private bool _isPlayerDead;
+    private bool _isTouchingObstacleSide;
 
 
     private static readonly int _animatorHashIsJump = Animator.StringToHash("isJumping");
@@ -77,7 +78,7 @@ public class CharacterController : MonoBehaviour
         {
             Signals.Instance.OnGenerateLevel?.Invoke();
         }
-       
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -88,8 +89,9 @@ public class CharacterController : MonoBehaviour
             _canJump = true;
             _animator.ResetTrigger(_animatorHashIsJump);
         }
-        if (collision.gameObject.CompareTag("ObstacleLeftSide"))
+        if (collision.gameObject.CompareTag("ObstacleLeftSide") && !_isTouchingObstacleSide)
         {
+            _isTouchingObstacleSide = true;
             if (playerSide == PlayerSide.Middle)
             {
                 playerSide = PlayerSide.Left;
@@ -101,8 +103,9 @@ public class CharacterController : MonoBehaviour
                 transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
             }
         }
-        if (collision.gameObject.CompareTag("ObstacleRightSide"))
+        if (collision.gameObject.CompareTag("ObstacleRightSide") && !_isTouchingObstacleSide)
         {
+            _isTouchingObstacleSide = true;
             if (playerSide == PlayerSide.Middle)
             {
                 playerSide = PlayerSide.Right;
@@ -113,6 +116,19 @@ public class CharacterController : MonoBehaviour
                 playerSide = PlayerSide.Middle;
                 transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
             }
+        }
+        if (collision.gameObject.CompareTag("ObstacleLeftInnerSide") || collision.gameObject.CompareTag("ObstacleRightInnerSide"))
+        {
+            _isTouchingObstacleSide = true;
+        }
+    }
+
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("ObstacleLeftSide") || collision.gameObject.CompareTag("ObstacleRightSide"))
+        {
+            _isTouchingObstacleSide = false;
         }
     }
 
@@ -135,16 +151,23 @@ public class CharacterController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.A) && playerSide != PlayerSide.Left && _isMoveComplete)
         {
             _isMoveComplete = false;
-            transform.DOMoveX(transform.position.x - moveDistance, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+            transform.DOMoveX(transform.position.x - moveDistance, 1 / slideSpeed).OnComplete(() =>
+            {
+                _isMoveComplete = true;
+            });
 
             if (playerSide == PlayerSide.Middle) playerSide = PlayerSide.Left;
             else playerSide = PlayerSide.Middle;
+
         }
         else if (Input.GetKeyDown(KeyCode.D) && playerSide != PlayerSide.Right && _isMoveComplete)
         {
             _isMoveComplete = false;
 
-            transform.DOMoveX(transform.position.x + moveDistance, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+            transform.DOMoveX(transform.position.x + moveDistance, 1 / slideSpeed).OnComplete(() =>
+            {
+                _isMoveComplete = true;
+            });
 
             if (playerSide == PlayerSide.Middle) playerSide = PlayerSide.Right;
             else playerSide = PlayerSide.Middle;
@@ -163,7 +186,6 @@ public class CharacterController : MonoBehaviour
         StopCoroutine(_slideTimer);
     }
 
-
     void HealthController()
     {
         playerHealth--;
@@ -176,11 +198,26 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-
     private void FadeController()
     {
         foreach (var _renderer in _renderer)
             _renderer.material.DOFade(0, 0.2f).OnComplete(() => _renderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() => _canDamage = true);
+    }
+
+    private void CheckPlayerSide()
+    {
+        if (playerSide == PlayerSide.Left)
+        {
+            transform.DOMoveX(1, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+        }
+        else if (playerSide == PlayerSide.Middle)
+        {
+            transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+        }
+        else if (playerSide == PlayerSide.Right)
+        {
+            transform.DOMoveX(5, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
+        }
     }
 
 

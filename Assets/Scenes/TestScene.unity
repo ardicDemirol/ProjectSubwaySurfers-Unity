@@ -161,18 +161,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2315298668035025173, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
-      propertyPath: moveSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2315298668035025174, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2315298668035025175, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
-      propertyPath: playerHealth
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2409640086395328465, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
       propertyPath: m_Name
       value: Player
@@ -191,7 +179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2413348311431989301, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2413348311431989301, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
       propertyPath: m_LocalRotation.w
@@ -728,10 +716,6 @@ PrefabInstance:
     - target: {fileID: 2809984462586735563, guid: 4555c8528ef1d3e459d8274bdee84aa7, type: 3}
       propertyPath: m_Name
       value: LevelTemplate
-      objectReference: {fileID: 0}
-    - target: {fileID: 2809984462586735563, guid: 4555c8528ef1d3e459d8274bdee84aa7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4555c8528ef1d3e459d8274bdee84aa7, type: 3}

@@ -12,6 +12,8 @@ TagManager:
   - ObstacleSide
   - ObstacleRightSide
   - ObstacleLeftSide
+  - ObstacleRightInnerSide
+  - ObstacleLeftInnerSide
   layers:
   - Default
   - TransparentFX

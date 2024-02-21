@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveDirection: 0
-  moveSpeed: 3
+  moveSpeed: 10
 --- !u!114 &2315298668035025175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
   moveDistance: 2
   slideSpeed: 2
   jumpSpeed: 2
-  playerHealth: 1
+  playerHealth: 3
 --- !u!1 &2409657699906912353
 GameObject:
   m_ObjectHideFlags: 0
