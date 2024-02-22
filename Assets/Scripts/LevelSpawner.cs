@@ -20,8 +20,21 @@ public class LevelSpawner : MonoBehaviour
         _spawnObjectsCount = spawnObjects.Length;
         _objectPointsCount = leftSpawnPoints.Length;
         _coinPointsCount = coinSpawnPoints.Length;
+        InstantiateObjects();
     }
-    void Start()
+    private int GetUniqueRandomIndex(List<int> usedIndexes, int range)
+    {
+        if (usedIndexes.Count >= range) return -1;
+
+        int randomIndex = Random.Range(0, range);
+        while (usedIndexes.Contains(randomIndex))
+        {
+            randomIndex = Random.Range(0, range);
+        }
+        return randomIndex;
+    }
+
+    private void InstantiateObjects()
     {
         List<int> usedCoinIndexes = new();
 
@@ -48,18 +61,8 @@ public class LevelSpawner : MonoBehaviour
             Instantiate(spawnObjects[Random.Range(0, _spawnObjectsCount)], rightSpawnPoints[randomIndex].position, Quaternion.identity, rightSpawnPoints[randomIndex]);
             usedObstacleIndexes.Add(randomIndex);
         }
-        
+
     }
 
-    int GetUniqueRandomIndex(List<int> usedIndexes, int range)
-    {
-        if (usedIndexes.Count >= range) return -1;
 
-        int randomIndex = Random.Range(0, range);
-        while (usedIndexes.Contains(randomIndex))
-        {
-            randomIndex = Random.Range(0, range);
-        }
-        return randomIndex;
-    }
 }

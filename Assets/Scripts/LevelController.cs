@@ -53,12 +53,11 @@ public class LevelController : MonoBehaviour
     {
         for (int i = 0; i < templateCount; i++)
         {
-            GameObject newObj = Instantiate(levelTemplate);
+            GameObject newObj = Instantiate(levelTemplate,levelParent);
             levelTemplate.SetActive(false);
             _pooledObjects.Enqueue(newObj);
         }
     }
-
 
     private GameObject GetPooledObject()
     {
@@ -72,4 +71,6 @@ public class LevelController : MonoBehaviour
         return obj;
 
     }
+
+    
 }

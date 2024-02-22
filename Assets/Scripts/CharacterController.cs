@@ -137,7 +137,7 @@ public class CharacterController : MonoBehaviour
             transform.DOMoveY(transform.position.y + jumpForce, 1 / jumpSpeed);
 
         }
-        else if (Input.GetKeyDown(KeyCode.S) && _canSlide)
+        else if (Input.GetKeyDown(KeyCode.S) && _canJump && _canSlide)
         {
             _slideTimer = SlideTimer();
             StartCoroutine(_slideTimer);
@@ -198,23 +198,5 @@ public class CharacterController : MonoBehaviour
         foreach (var _renderer in _renderer)
             _renderer.material.DOFade(0, 0.2f).OnComplete(() => _renderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() => _canDamage = true);
     }
-
-    private void CheckPlayerSide()
-    {
-        if (playerSide == PlayerSide.Left)
-        {
-            transform.DOMoveX(1, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
-        }
-        else if (playerSide == PlayerSide.Middle)
-        {
-            transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
-        }
-        else if (playerSide == PlayerSide.Right)
-        {
-            transform.DOMoveX(5, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
-        }
-    }
-
-
 
 }
