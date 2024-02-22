@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class MovementController : MonoBehaviour
+public class ObjectMovementController : MonoBehaviour
 {
     [SerializeField] protected float rotationDuration = 1f;
     [SerializeField] protected float moveDistance = 0.2f;
