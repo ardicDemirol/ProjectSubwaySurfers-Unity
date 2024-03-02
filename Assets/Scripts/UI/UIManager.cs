@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameObject inGamePanel;
-    [SerializeField] TextMeshProUGUI scoreText;
-    [SerializeField] TextMeshProUGUI healthText;
+    #region Variables
 
-    [SerializeField] GameObject finishPanel;
-    [SerializeField] TextMeshProUGUI levelScoreText;
-    [SerializeField] TextMeshProUGUI maxScoreText;
+    [SerializeField] private readonly GameObject inGamePanel;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private readonly GameObject finishPanel;
+    [SerializeField] private TextMeshProUGUI levelScoreText;
+    [SerializeField] private TextMeshProUGUI maxScoreText;
 
     private float _score;
     private float _maxScore;
 
     private bool _isPlayerDead;
 
+    #endregion
+
+    #region Unity Callbacks
     private void Awake()
     {
         _maxScore = PlayerPrefs.GetFloat("Score", 0f);
@@ -43,6 +47,10 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable() => UnSubscribeEvents();
 
+
+    #endregion
+
+    #region Other Methods
     private void SubscribeEvents()
     {
         Signals.Instance.OnPlayerTakeDamage += PlayerTakeDamage;
@@ -82,6 +90,6 @@ public class UIManager : MonoBehaviour
         maxScoreText.text = "Max Score: " + (int)_maxScore;
     }
 
-   
+    #endregion
 
 }
