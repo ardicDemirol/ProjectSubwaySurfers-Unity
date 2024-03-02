@@ -3,24 +3,25 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField] private GameObject levelTemplate;
     [SerializeField] private Transform levelParent;
     [SerializeField] private short templateCount;
 
 
     private GameObject _spawnObject;
-    private Queue<GameObject> _pooledObjects = new();
+    private readonly Queue<GameObject> pooledObjects = new();
 
     private float _tileDistance;
     private float _zPos;
 
     private int _pieceCount;
+    #endregion
 
-    private void Awake()
-    {
-        _tileDistance = 100;
-    }
+    #region Unity Callbacks
 
+    private void Awake() => _tileDistance = 100;
     private void Start()
     {
         SetPooledObject();
@@ -31,6 +32,9 @@ public class LevelController : MonoBehaviour
 
     private void OnDisable() => UnSubscribeEvents();
 
+    #endregion
+
+    #region Other Methods
     private void SubscribeEvents()
     {
         Signals.Instance.OnGenerateLevel += GenerateLevel;
@@ -55,22 +59,23 @@ public class LevelController : MonoBehaviour
         {
             GameObject newObj = Instantiate(levelTemplate,levelParent);
             levelTemplate.SetActive(false);
-            _pooledObjects.Enqueue(newObj);
+            pooledObjects.Enqueue(newObj);
         }
     }
 
     private GameObject GetPooledObject()
     {
-        GameObject obj = _pooledObjects.Dequeue();
+        GameObject obj = pooledObjects.Dequeue();
         obj.SetActive(true);
-        _pooledObjects.Enqueue(obj);
+        pooledObjects.Enqueue(obj);
 
-        GameObject[] pooledArray = _pooledObjects.ToArray();
+        GameObject[] pooledArray = pooledObjects.ToArray();
         if (_pieceCount == 3) pooledArray[0].SetActive(false);
 
         return obj;
 
     }
+    #endregion
 
-    
+
 }

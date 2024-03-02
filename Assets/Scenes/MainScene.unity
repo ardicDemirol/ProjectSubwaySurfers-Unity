@@ -209,6 +209,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8585126119236353374, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8585126119236353374, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
+      propertyPath: m_ReflectionProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
 --- !u!114 &1040342158 stripped
@@ -332,10 +340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34ddf0975f1d054c9434506b6f29664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inGamePanel: {fileID: 1693038973}
   scoreText: {fileID: 1718073503}
   healthText: {fileID: 1040342158}
-  finishPanel: {fileID: 2066777488}
   levelScoreText: {fileID: 1212263838}
   maxScoreText: {fileID: 2122533163}
 --- !u!4 &1477280883
@@ -380,11 +386,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0fa3da2b76b34e489971293f0123174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1693038973 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4801641279907725229, guid: 7256a131234f1e84ebd0ed4d710035f8, type: 3}
-  m_PrefabInstance: {fileID: 4801641279428085456}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1718073503 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4801641279866699343, guid: 7256a131234f1e84ebd0ed4d710035f8, type: 3}
@@ -490,11 +491,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &2066777488 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4801641280047760192, guid: 7256a131234f1e84ebd0ed4d710035f8, type: 3}
-  m_PrefabInstance: {fileID: 4801641279428085456}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2122533163 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4801641280006950907, guid: 7256a131234f1e84ebd0ed4d710035f8, type: 3}

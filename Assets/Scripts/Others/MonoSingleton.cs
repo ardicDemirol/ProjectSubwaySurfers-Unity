@@ -20,9 +20,11 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
             return _instance;
         }
     }
-
+    #region Unity Callbacks
     protected virtual void Awake()
     {
         _instance = this as T;
     }
+
+    #endregion
 }

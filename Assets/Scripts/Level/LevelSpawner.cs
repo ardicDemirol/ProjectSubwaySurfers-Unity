@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class LevelSpawner : MonoBehaviour
 {
+    #region Variables
+
     [SerializeField] private Transform[] leftSpawnPoints;
     [SerializeField] private Transform[] middleSpawnPoints;
     [SerializeField] private Transform[] rightSpawnPoints;
@@ -15,6 +17,9 @@ public class LevelSpawner : MonoBehaviour
     private int _objectPointsCount;
     private int _coinPointsCount;
 
+    #endregion
+
+    #region Unity Callbacks
     private void Awake()
     {
         _spawnObjectsCount = spawnObjects.Length;
@@ -22,6 +27,10 @@ public class LevelSpawner : MonoBehaviour
         _coinPointsCount = coinSpawnPoints.Length;
         InstantiateObjects();
     }
+    #endregion
+
+    #region Other Methods
+ 
     private int GetUniqueRandomIndex(List<int> usedIndexes, int range)
     {
         if (usedIndexes.Count >= range) return -1;
@@ -63,6 +72,6 @@ public class LevelSpawner : MonoBehaviour
         }
 
     }
-
+    #endregion
 
 }

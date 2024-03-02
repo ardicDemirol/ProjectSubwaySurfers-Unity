@@ -4,6 +4,7 @@ using System.Collections;
 
 public class CharacterController : MonoBehaviour
 {
+    #region Variables
     public enum PlayerSide
     {
         Left,
@@ -13,16 +14,16 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField] private PlayerSide playerSide = PlayerSide.Middle;
 
-    [SerializeField] private float jumpForce = 4f;
-    [SerializeField] private float moveDistance = 4f;
-    [SerializeField] private float slideSpeed = 2f;
+    [SerializeField] private float jumpForce = 2.5f;
+    [SerializeField] private float moveDistance = 2f;
+    [SerializeField] private float slideSpeed = 3f;
     [SerializeField] private float jumpSpeed = 2f;
-
     [SerializeField] private short playerHealth = 3;
+    [SerializeField] private Renderer characterRenderer;
 
-    private Animator _animator;
+
+    private static Animator _animator;
     private CapsuleCollider _collider;
-    private Renderer[] _renderer;
 
     private static readonly WaitForSeconds _waitForOneHalfSeconds = new(1.5f);
     private IEnumerator _slideTimer;
@@ -39,21 +40,17 @@ public class CharacterController : MonoBehaviour
     private static readonly int _animatorHashIsDie = Animator.StringToHash("isDying");
     private static readonly int _animatorHashIsSlide = Animator.StringToHash("isSliding");
 
+    #endregion
+
+    #region Unity Callbacks
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _collider = GetComponent<CapsuleCollider>();
-        _renderer = GetComponentsInChildren<Renderer>();
     }
     private void Start()
     {
         Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
-    }
-
-    private void Update()
-    {
-        if (_isPlayerDead) return;
-        GetInput();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -117,8 +114,6 @@ public class CharacterController : MonoBehaviour
             _isTouchingObstacleSide = true;
         }
     }
-
-
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("ObstacleLeftSide") || collision.gameObject.CompareTag("ObstacleRightSide"))
@@ -127,6 +122,16 @@ public class CharacterController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (_isPlayerDead) return;
+        GetInput();
+    }
+
+    #endregion
+
+    #region Other Methods
+ 
     void GetInput()
     {
         if (Input.GetKeyDown(KeyCode.W) && _canJump && _canSlide)
@@ -135,7 +140,6 @@ public class CharacterController : MonoBehaviour
             _animator.SetTrigger(_animatorHashIsJump);
 
             transform.DOMoveY(transform.position.y + jumpForce, 1 / jumpSpeed);
-
         }
         else if (Input.GetKeyDown(KeyCode.S) && _canJump && _canSlide)
         {
@@ -195,8 +199,24 @@ public class CharacterController : MonoBehaviour
 
     private void FadeController()
     {
-        foreach (var _renderer in _renderer)
-            _renderer.material.DOFade(0, 0.2f).OnComplete(() => _renderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() => _canDamage = true);
-    }
+        characterRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        characterRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        characterRenderer.material.SetInt("_ZWrite", 0);
+        characterRenderer.material.EnableKeyword("_ALPHABLEND_ON");
+        characterRenderer.material.renderQueue = 3000;
 
+
+        characterRenderer.material.DOFade(0, 0.2f).OnComplete(() => characterRenderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() =>
+        {
+            characterRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+            characterRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+            characterRenderer.material.SetInt("_ZWrite", 1);
+            characterRenderer.material.DisableKeyword("_ALPHABLEND_ON");
+            characterRenderer.material.renderQueue = -1;
+
+            _canDamage = true;
+
+        });
+    }
+    #endregion
 }

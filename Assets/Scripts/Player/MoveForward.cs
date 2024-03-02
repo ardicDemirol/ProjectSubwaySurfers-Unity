@@ -17,6 +17,7 @@ public class MoveForward : MonoBehaviour
 
     #endregion
 
+    #region Unity Callbacks
     private void OnEnable() => SubscribeEvents();
 
     private void Start()
@@ -38,7 +39,9 @@ public class MoveForward : MonoBehaviour
     }
     private void OnDisable() => UnSubscribeEvents();
 
+    #endregion
 
+    #region Other Methods
     public void SubscribeEvents()
     {
         Signals.Instance.OnPlayerDie += OnPlayerDie;
@@ -53,5 +56,7 @@ public class MoveForward : MonoBehaviour
     {
         moveSpeed = 0;
     }
+
+    #endregion
 
 }
