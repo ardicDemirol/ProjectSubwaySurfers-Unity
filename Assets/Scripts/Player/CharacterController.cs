@@ -40,6 +40,7 @@ public class CharacterController : MonoBehaviour
     private static readonly int _animatorHashIsDie = Animator.StringToHash("isDying");
     private static readonly int _animatorHashIsSlide = Animator.StringToHash("isSliding");
 
+    private Touch touch;
     #endregion
 
     #region Unity Callbacks
@@ -131,46 +132,67 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     #region Other Methods
- 
+
     void GetInput()
     {
-        if (Input.GetKeyDown(KeyCode.W) && _canJump && _canSlide)
+        if (Input.touchCount > 0)
         {
-            _canJump = false;
-            _animator.SetTrigger(_animatorHashIsJump);
+            touch = Input.GetTouch(0);
 
-            transform.DOMoveY(transform.position.y + jumpForce, 1 / jumpSpeed);
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && _canJump && _canSlide)
-        {
-            _slideTimer = SlideTimer();
-            StartCoroutine(_slideTimer);
-            _animator.SetTrigger(_animatorHashIsSlide);
-        }
-        else if (Input.GetKeyDown(KeyCode.A) && playerSide != PlayerSide.Left && _isMoveComplete)
-        {
-            _isMoveComplete = false;
-            transform.DOMoveX(transform.position.x - moveDistance, 1 / slideSpeed).OnComplete(() =>
+            if (touch.phase == TouchPhase.Moved)
             {
-                _isMoveComplete = true;
-            });
+                float deltaX = touch.deltaPosition.x;
+                float deltaY = touch.deltaPosition.y;
 
-            if (playerSide == PlayerSide.Middle) playerSide = PlayerSide.Left;
-            else playerSide = PlayerSide.Middle;
+                if (Mathf.Abs(deltaY) > Mathf.Abs(deltaX))
+                {
+                    if (deltaY > 0 && /*Input.GetKeyDown(KeyCode.W) &&*/ _canJump && _canSlide)
+                    {
+                        _canJump = false;
+                        _animator.SetTrigger(_animatorHashIsJump);
 
+                        transform.DOMoveY(transform.position.y + jumpForce, 1 / jumpSpeed);
+                    }
+                    else if (deltaY < 0 && /*Input.GetKeyDown(KeyCode.S) &&*/ _canJump && _canSlide)
+                    {
+                        _slideTimer = SlideTimer();
+                        StartCoroutine(_slideTimer);
+                        _animator.SetTrigger(_animatorHashIsSlide);
+                    }
+                }
+                else
+                {
+                    if (deltaX < 0 && /*Input.GetKeyDown(KeyCode.A) &&*/ playerSide != PlayerSide.Left && _isMoveComplete)
+                    {
+                        _isMoveComplete = false;
+                        transform.DOMoveX(transform.position.x - moveDistance, 1 / slideSpeed).OnComplete(() =>
+                        {
+                            _isMoveComplete = true;
+                        });
+
+                        if (playerSide == PlayerSide.Middle) playerSide = PlayerSide.Left;
+                        else playerSide = PlayerSide.Middle;
+
+                    }
+                    else if (deltaX > 0 && /*Input.GetKeyDown(KeyCode.D) &&*/ playerSide != PlayerSide.Right && _isMoveComplete)
+                    {
+                        _isMoveComplete = false;
+
+                        transform.DOMoveX(transform.position.x + moveDistance, 1 / slideSpeed).OnComplete(() =>
+                        {
+                            _isMoveComplete = true;
+                        });
+
+                        if (playerSide == PlayerSide.Middle) playerSide = PlayerSide.Right;
+                        else playerSide = PlayerSide.Middle;
+                    }
+                }
+               
+                
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.D) && playerSide != PlayerSide.Right && _isMoveComplete)
-        {
-            _isMoveComplete = false;
 
-            transform.DOMoveX(transform.position.x + moveDistance, 1 / slideSpeed).OnComplete(() =>
-            {
-                _isMoveComplete = true;
-            });
 
-            if (playerSide == PlayerSide.Middle) playerSide = PlayerSide.Right;
-            else playerSide = PlayerSide.Middle;
-        }
     }
 
     private IEnumerator SlideTimer()

@@ -14,6 +14,7 @@ public class MoveForward : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
 
     private Vector3 _moveDirectionVector;
+    private bool _speedCanIncrease;
 
     #endregion
 
@@ -34,6 +35,7 @@ public class MoveForward : MonoBehaviour
     }
     private void Update()
     {
+        if (!_speedCanIncrease) return;
         moveSpeed += Time.deltaTime * 0.015f;
         transform.position += _moveDirectionVector * (moveSpeed * Time.deltaTime);
     }
@@ -45,15 +47,24 @@ public class MoveForward : MonoBehaviour
     public void SubscribeEvents()
     {
         Signals.Instance.OnPlayerDie += OnPlayerDie;
+        Signals.Instance.OnGameRunning += OnGameRunning;
     }
 
     public void UnSubscribeEvents()
     {
         Signals.Instance.OnPlayerDie -= OnPlayerDie;
+        Signals.Instance.OnGameRunning -= OnGameRunning;
+    }
+
+    private void OnGameRunning()
+    {
+        Time.timeScale = 1;
+        _speedCanIncrease = true;
     }
 
     private void OnPlayerDie()
     {
+        _speedCanIncrease = false;
         moveSpeed = 0;
     }
 

@@ -1,17 +1,25 @@
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private readonly GameObject inGamePanel;
+    [SerializeField] private GameObject inGamePanel;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private readonly GameObject finishPanel;
+    [SerializeField] private GameObject finishPanel;
     [SerializeField] private TextMeshProUGUI levelScoreText;
     [SerializeField] private TextMeshProUGUI maxScoreText;
+
+    [SerializeField] private GameObject startPanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject pauseButton;
+    [SerializeField] private Button startButton;
+    private bool _isPaused;
+
 
     private float _score;
     private float _maxScore;
@@ -56,6 +64,8 @@ public class UIManager : MonoBehaviour
         Signals.Instance.OnPlayerTakeDamage += PlayerTakeDamage;
         Signals.Instance.OnPlayerDie += ControlScore;
         Signals.Instance.OnCoinCollected += CoinCollected;
+        Signals.Instance.OnGameRunning += CanvasController;
+
     }
 
     private void UnSubscribeEvents()
@@ -63,6 +73,8 @@ public class UIManager : MonoBehaviour
         Signals.Instance.OnPlayerTakeDamage -= PlayerTakeDamage;
         Signals.Instance.OnPlayerDie -= ControlScore;
         Signals.Instance.OnCoinCollected -= CoinCollected;
+        Signals.Instance.OnGameRunning -= CanvasController;
+
     }
 
     private void CoinCollected()
@@ -89,6 +101,22 @@ public class UIManager : MonoBehaviour
         levelScoreText.text = "Level Score: " + (int)_score;
         maxScoreText.text = "Max Score: " + (int)_maxScore;
     }
+
+    private void CanvasController()
+    {
+        startPanel.SetActive(false);
+        inGamePanel.SetActive(true);
+    }
+
+    public void TogglePause()
+    {
+        pauseButton.SetActive(_isPaused);
+        pausePanel.SetActive(!_isPaused);
+        _isPaused = !_isPaused;
+        Time.timeScale = _isPaused ? 0f : 1f;
+    }
+
+
 
     #endregion
 
