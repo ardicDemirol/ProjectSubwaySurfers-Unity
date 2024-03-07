@@ -36,7 +36,7 @@ public class MoveForward : MonoBehaviour
     private void Update()
     {
         if (!_speedCanIncrease) return;
-        moveSpeed += Time.deltaTime * 0.015f;
+        moveSpeed += Time.deltaTime * 0.02f;
         transform.position += _moveDirectionVector * (moveSpeed * Time.deltaTime);
     }
     private void OnDisable() => UnSubscribeEvents();

@@ -166,17 +166,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2315298668035025173, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
-      propertyPath: moveSpeed
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 2409640086395328465, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 2409640086395328465, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2413348311431989301, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
       propertyPath: m_RootOrder
@@ -221,10 +213,6 @@ PrefabInstance:
     - target: {fileID: 2413348311431989301, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5462315892180656907, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e221a37fbe91eb43bf699d4f53cc4af, type: 3}
@@ -295,8 +283,8 @@ MonoBehaviour:
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
   m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
+  m_InputActionsPerSecond: 5
+  m_RepeatDelay: 2
   m_ForceModuleActive: 0
 --- !u!114 &1358143382
 MonoBehaviour:
@@ -523,14 +511,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1477280880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 238c83901cb5d464bba8a5a65b0b9e19, type: 2}
-  isGlobal: 0
+  m_IsGlobal: 1
+  priority: 0
   blendDistance: 0
   weight: 1
-  priority: 0
+  sharedProfile: {fileID: 11400000, guid: 231e8298ba2a72b4a8529075ed66f3f5, type: 2}
 --- !u!1 &1668981684 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1668981684, guid: 7256a131234f1e84ebd0ed4d710035f8, type: 3}

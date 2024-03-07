@@ -11,15 +11,23 @@ public class CharacterController : MonoBehaviour
         Right,
         Middle
     }
+    public enum RenderingMode
+    {
+        Opaque,
+        Transparent
+    }
+
 
     [SerializeField] private PlayerSide playerSide = PlayerSide.Middle;
-
     [SerializeField] private float jumpForce = 2.5f;
-    [SerializeField] private float moveDistance = 2f;
     [SerializeField] private float slideSpeed = 3f;
     [SerializeField] private float jumpSpeed = 2f;
     [SerializeField] private short playerHealth = 3;
+
+    [Header("Material Settings")]
     [SerializeField] private Renderer characterRenderer;
+    [SerializeField] private Material opaqueMaterial;
+    [SerializeField] private Material transparentMaterial;
 
 
     private static Animator _animator;
@@ -34,6 +42,7 @@ public class CharacterController : MonoBehaviour
     private bool _isMoveComplete = true;
     private bool _isPlayerDead;
     private bool _isTouchingObstacleSide;
+    private readonly float _moveDistance = 2f;
 
 
     private static readonly int _animatorHashIsJump = Animator.StringToHash("isJumping");
@@ -58,7 +67,6 @@ public class CharacterController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Obstacle") && _canDamage)
         {
-            //Debug.Log("Player collided with " + other.gameObject.name);
             _canDamage = false;
             HealthController();
             FadeController();
@@ -84,6 +92,7 @@ public class CharacterController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("ObstacleLeftSide") && !_isTouchingObstacleSide)
         {
+            Handheld.Vibrate();
             _isTouchingObstacleSide = true;
             if (playerSide == PlayerSide.Middle)
             {
@@ -98,6 +107,7 @@ public class CharacterController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("ObstacleRightSide") && !_isTouchingObstacleSide)
         {
+            Handheld.Vibrate();
             _isTouchingObstacleSide = true;
             if (playerSide == PlayerSide.Middle)
             {
@@ -112,6 +122,7 @@ public class CharacterController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("ObstacleLeftInnerSide") || collision.gameObject.CompareTag("ObstacleRightInnerSide"))
         {
+            Handheld.Vibrate();
             _isTouchingObstacleSide = true;
         }
     }
@@ -146,14 +157,14 @@ public class CharacterController : MonoBehaviour
 
                 if (Mathf.Abs(deltaY) > Mathf.Abs(deltaX))
                 {
-                    if (deltaY > 0 && /*Input.GetKeyDown(KeyCode.W) &&*/ _canJump && _canSlide)
+                    if (deltaY > 0  && _canJump && _canSlide)
                     {
                         _canJump = false;
                         _animator.SetTrigger(_animatorHashIsJump);
 
                         transform.DOMoveY(transform.position.y + jumpForce, 1 / jumpSpeed);
                     }
-                    else if (deltaY < 0 && /*Input.GetKeyDown(KeyCode.S) &&*/ _canJump && _canSlide)
+                    else if (deltaY < 0 && _canJump && _canSlide)
                     {
                         _slideTimer = SlideTimer();
                         StartCoroutine(_slideTimer);
@@ -162,10 +173,10 @@ public class CharacterController : MonoBehaviour
                 }
                 else
                 {
-                    if (deltaX < 0 && /*Input.GetKeyDown(KeyCode.A) &&*/ playerSide != PlayerSide.Left && _isMoveComplete)
+                    if (deltaX < 0 && playerSide != PlayerSide.Left && _isMoveComplete)
                     {
                         _isMoveComplete = false;
-                        transform.DOMoveX(transform.position.x - moveDistance, 1 / slideSpeed).OnComplete(() =>
+                        transform.DOMoveX(transform.position.x - _moveDistance, 1 / slideSpeed).OnComplete(() =>
                         {
                             _isMoveComplete = true;
                         });
@@ -174,11 +185,11 @@ public class CharacterController : MonoBehaviour
                         else playerSide = PlayerSide.Middle;
 
                     }
-                    else if (deltaX > 0 && /*Input.GetKeyDown(KeyCode.D) &&*/ playerSide != PlayerSide.Right && _isMoveComplete)
+                    else if (deltaX > 0 && playerSide != PlayerSide.Right && _isMoveComplete)
                     {
                         _isMoveComplete = false;
 
-                        transform.DOMoveX(transform.position.x + moveDistance, 1 / slideSpeed).OnComplete(() =>
+                        transform.DOMoveX(transform.position.x + _moveDistance, 1 / slideSpeed).OnComplete(() =>
                         {
                             _isMoveComplete = true;
                         });
@@ -187,12 +198,8 @@ public class CharacterController : MonoBehaviour
                         else playerSide = PlayerSide.Middle;
                     }
                 }
-               
-                
             }
         }
-
-
     }
 
     private IEnumerator SlideTimer()
@@ -211,6 +218,7 @@ public class CharacterController : MonoBehaviour
     {
         playerHealth--;
         Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
+        Handheld.Vibrate();
         if (playerHealth <= 0)
         {
             _isPlayerDead = true;
@@ -221,24 +229,28 @@ public class CharacterController : MonoBehaviour
 
     private void FadeController()
     {
-        characterRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        characterRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        characterRenderer.material.SetInt("_ZWrite", 0);
-        characterRenderer.material.EnableKeyword("_ALPHABLEND_ON");
-        characterRenderer.material.renderQueue = 3000;
-
-
+        SetRenderingMode(RenderingMode.Transparent);
         characterRenderer.material.DOFade(0, 0.2f).OnComplete(() => characterRenderer.material.DOFade(1, 0.2f)).SetLoops(14, LoopType.Yoyo).OnComplete(() =>
         {
-            characterRenderer.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-            characterRenderer.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-            characterRenderer.material.SetInt("_ZWrite", 1);
-            characterRenderer.material.DisableKeyword("_ALPHABLEND_ON");
-            characterRenderer.material.renderQueue = -1;
-
+            SetRenderingMode(RenderingMode.Opaque);
             _canDamage = true;
-
         });
     }
+
+    private void SetRenderingMode(RenderingMode mode)
+    {
+        switch (mode)
+        {
+            case RenderingMode.Opaque:
+                characterRenderer.material = opaqueMaterial;
+                break;
+            case RenderingMode.Transparent:
+                characterRenderer.material = transparentMaterial;
+                break;
+            default: break;
+        }
+    }
+
+
     #endregion
 }
