@@ -1,7 +1,6 @@
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -17,14 +16,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject startPanel;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject pauseButton;
-    [SerializeField] private Button startButton;
+    
+    private const int _coinScore = 75;
+    private const float _scoreMultiplier = 5f;
+    
     private bool _isPaused;
-
+    private bool _isPlayerDead;
 
     private float _score;
     private float _maxScore;
 
-    private bool _isPlayerDead;
 
     #endregion
 
@@ -33,12 +34,7 @@ public class UIManager : MonoBehaviour
     {
         _maxScore = PlayerPrefs.GetFloat("Score", 0f);
     }
-
-    private void OnEnable()
-    {
-        SubscribeEvents();
-    }
-
+    private void OnEnable() => SubscribeEvents();
 
     private void Update()
     {
@@ -46,7 +42,7 @@ public class UIManager : MonoBehaviour
 
         if (_score > _maxScore) scoreText.color = Color.yellow;
 
-        _score += Time.deltaTime * 5f;
+        _score += Time.deltaTime * _scoreMultiplier;
 
         StringBuilder stringBuilder = new();
         stringBuilder.Append("Score: " + (int)_score);
@@ -65,7 +61,6 @@ public class UIManager : MonoBehaviour
         Signals.Instance.OnPlayerDie += ControlScore;
         Signals.Instance.OnCoinCollected += CoinCollected;
         Signals.Instance.OnGameRunning += CanvasController;
-
     }
 
     private void UnSubscribeEvents()
@@ -74,12 +69,11 @@ public class UIManager : MonoBehaviour
         Signals.Instance.OnPlayerDie -= ControlScore;
         Signals.Instance.OnCoinCollected -= CoinCollected;
         Signals.Instance.OnGameRunning -= CanvasController;
-
     }
 
     private void CoinCollected()
     {
-        _score += 75;
+        _score += _coinScore;
     }
 
     private void PlayerTakeDamage(short arg0)

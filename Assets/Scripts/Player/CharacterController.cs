@@ -5,20 +5,10 @@ using System.Collections;
 public class CharacterController : MonoBehaviour
 {
     #region Variables
-    public enum PlayerSide
-    {
-        Left,
-        Right,
-        Middle
-    }
-    public enum RenderingMode
-    {
-        Opaque,
-        Transparent
-    }
-
-
+    [Header("Player Settings")]
     [SerializeField] private PlayerSide playerSide = PlayerSide.Middle;
+
+    [Header("Movement Settings")]
     [SerializeField] private float jumpForce = 2.5f;
     [SerializeField] private float slideSpeed = 3f;
     [SerializeField] private float jumpSpeed = 2f;
@@ -32,32 +22,51 @@ public class CharacterController : MonoBehaviour
 
     private static Animator _animator;
     private CapsuleCollider _collider;
-
-    private static readonly WaitForSeconds _waitForOneHalfSeconds = new(1.5f);
     private IEnumerator _slideTimer;
+    private Touch _touch;
+
 
     private bool _canJump = true;
     private bool _canSlide = true;
     private bool _canDamage = true;
     private bool _isMoveComplete = true;
-    private bool _isPlayerDead;
+    private bool _canPlayerMove = false;
     private bool _isTouchingObstacleSide;
-    private readonly float _moveDistance = 2f;
 
+
+
+    private static readonly WaitForSeconds _waitForOneHalfSeconds = new(1.5f);
+
+    private readonly float _moveDistance = 2f;
 
     private static readonly int _animatorHashIsJump = Animator.StringToHash("isJumping");
     private static readonly int _animatorHashIsDie = Animator.StringToHash("isDying");
     private static readonly int _animatorHashIsSlide = Animator.StringToHash("isSliding");
 
-    private Touch touch;
+    private static readonly string _obstacleTag = "Obstacle";
+    private static readonly string _coinTag = "Coin";
+    private static readonly string _pieceGeneratorTag = "PieceGenerator";
+    private static readonly string _groundTag = "Ground";
+    private static readonly string _obstacleLeftSideTag = "ObstacleLeftSide";
+    private static readonly string _obstacleRightSideTag = "ObstacleRightSide";
+    private static readonly string _obstacleLeftInnerSideTag = "ObstacleLeftInnerSide";
+    private static readonly string _obstacleRightInnerSide = "ObstacleRightInnerSide";
+
     #endregion
 
     #region Unity Callbacks
+
+   
+   
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _collider = GetComponent<CapsuleCollider>();
     }
+    
+    private void OnEnable() => SubscribeEvents();
+
     private void Start()
     {
         Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
@@ -65,18 +74,18 @@ public class CharacterController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Obstacle") && _canDamage)
+        if (other.gameObject.CompareTag(_obstacleTag) && _canDamage)
         {
             _canDamage = false;
             HealthController();
             FadeController();
         }
-        if (other.gameObject.CompareTag("Coin"))
+        if (other.gameObject.CompareTag(_coinTag))
         {
             other.gameObject.GetComponent<MeshRenderer>().enabled = false;
             Signals.Instance.OnCoinCollected?.Invoke();
         }
-        if (other.gameObject.CompareTag("PieceGenerator"))
+        if (other.gameObject.CompareTag(_pieceGeneratorTag))
         {
             Signals.Instance.OnGenerateLevel?.Invoke();
         }
@@ -85,12 +94,12 @@ public class CharacterController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag(_groundTag))
         {
             _canJump = true;
             _animator.ResetTrigger(_animatorHashIsJump);
         }
-        if (collision.gameObject.CompareTag("ObstacleLeftSide") && !_isTouchingObstacleSide)
+        if (collision.gameObject.CompareTag(_obstacleLeftSideTag) && !_isTouchingObstacleSide)
         {
             Handheld.Vibrate();
             _isTouchingObstacleSide = true;
@@ -105,7 +114,7 @@ public class CharacterController : MonoBehaviour
                 transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
             }
         }
-        if (collision.gameObject.CompareTag("ObstacleRightSide") && !_isTouchingObstacleSide)
+        if (collision.gameObject.CompareTag(_obstacleRightSideTag) && !_isTouchingObstacleSide)
         {
             Handheld.Vibrate();
             _isTouchingObstacleSide = true;
@@ -120,7 +129,7 @@ public class CharacterController : MonoBehaviour
                 transform.DOMoveX(3, 1 / slideSpeed).OnComplete(() => _isMoveComplete = true);
             }
         }
-        if (collision.gameObject.CompareTag("ObstacleLeftInnerSide") || collision.gameObject.CompareTag("ObstacleRightInnerSide"))
+        if (collision.gameObject.CompareTag(_obstacleLeftInnerSideTag) || collision.gameObject.CompareTag(_obstacleRightInnerSide))
         {
             Handheld.Vibrate();
             _isTouchingObstacleSide = true;
@@ -128,7 +137,7 @@ public class CharacterController : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("ObstacleLeftSide") || collision.gameObject.CompareTag("ObstacleRightSide"))
+        if (collision.gameObject.CompareTag(_obstacleLeftSideTag) || collision.gameObject.CompareTag(_obstacleRightSideTag))
         {
             _isTouchingObstacleSide = false;
         }
@@ -136,11 +145,13 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlayerDead) return;
-        GetInput();
+        if (_canPlayerMove) GetInput();
     }
+    
+    private void OnDisable() => UnSubscribeEvents();
 
     #endregion
+
 
     #region Other Methods
 
@@ -148,16 +159,16 @@ public class CharacterController : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
-            touch = Input.GetTouch(0);
+            _touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Moved)
+            if (_touch.phase == TouchPhase.Moved)
             {
-                float deltaX = touch.deltaPosition.x;
-                float deltaY = touch.deltaPosition.y;
+                float deltaX = _touch.deltaPosition.x;
+                float deltaY = _touch.deltaPosition.y;
 
                 if (Mathf.Abs(deltaY) > Mathf.Abs(deltaX))
                 {
-                    if (deltaY > 0  && _canJump && _canSlide)
+                    if (deltaY > 0 && _canJump && _canSlide)
                     {
                         _canJump = false;
                         _animator.SetTrigger(_animatorHashIsJump);
@@ -219,9 +230,10 @@ public class CharacterController : MonoBehaviour
         playerHealth--;
         Signals.Instance.OnPlayerTakeDamage?.Invoke(playerHealth);
         Handheld.Vibrate();
+
         if (playerHealth <= 0)
         {
-            _isPlayerDead = true;
+            _canPlayerMove = false;
             _animator.SetTrigger(_animatorHashIsDie);
             Signals.Instance.OnPlayerDie?.Invoke();
         }
@@ -250,6 +262,17 @@ public class CharacterController : MonoBehaviour
             default: break;
         }
     }
+
+    private void SubscribeEvents()
+    {
+        Signals.Instance.OnGameRunning += PlayerMoveController;
+    }
+
+    private void UnSubscribeEvents()
+    {
+        Signals.Instance.OnGameRunning -= PlayerMoveController;
+    }
+    private void PlayerMoveController() => _canPlayerMove = true;
 
 
     #endregion
