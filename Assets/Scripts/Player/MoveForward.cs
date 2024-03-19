@@ -3,18 +3,14 @@ using UnityEngine;
 public class MoveForward : MonoBehaviour
 {
     #region Variables
-    public enum Direction
-    {
-        Forward,
-        Backward,
-    }
-
+    
     public Direction MoveDirection;
 
     [SerializeField] private float moveSpeed = 5f;
 
     private Vector3 _moveDirectionVector;
     private bool _speedCanIncrease;
+    private const float SPEED_MULTIPLIER = 0.075f;
 
     #endregion
 
@@ -36,7 +32,7 @@ public class MoveForward : MonoBehaviour
     private void Update()
     {
         if (!_speedCanIncrease) return;
-        moveSpeed += Time.deltaTime * 0.02f;
+        moveSpeed += Time.deltaTime * SPEED_MULTIPLIER;
         transform.position += _moveDirectionVector * (moveSpeed * Time.deltaTime);
     }
     private void OnDisable() => UnSubscribeEvents();

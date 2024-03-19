@@ -56,9 +56,6 @@ public class CharacterController : MonoBehaviour
 
     #region Unity Callbacks
 
-   
-   
-
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -151,7 +148,6 @@ public class CharacterController : MonoBehaviour
     private void OnDisable() => UnSubscribeEvents();
 
     #endregion
-
 
     #region Other Methods
 

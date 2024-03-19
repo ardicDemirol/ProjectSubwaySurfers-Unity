@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using UnityEngine;
 
 internal class GameManager : MonoSingleton<GameManager>
 {
-    #region Other Methods
-
+    [SerializeField] private AudioClip _coinCollectClip;
     private AudioSource _audioSource;
+
 
     protected override void Awake()
     {
@@ -12,6 +13,21 @@ internal class GameManager : MonoSingleton<GameManager>
         _audioSource = GetComponent<AudioSource>();
         Time.timeScale = 0;
     }
+
+    private void OnEnable()
+    {
+        SubscribeEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnSubscribeEvents();
+    }
+
+
+    #region Other Methods
+
+   
     public void RestartGame()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
@@ -22,7 +38,21 @@ internal class GameManager : MonoSingleton<GameManager>
         Signals.Instance.OnGameRunning?.Invoke();
     }
 
+    void SubscribeEvents()
+    {
+        Signals.Instance.OnCoinCollected += PlayCoinCollectAudio;
+    }
 
+    void UnSubscribeEvents()
+    {
+        Signals.Instance.OnCoinCollected -= PlayCoinCollectAudio;
+    }
+
+    [Button]
+    private void PlayCoinCollectAudio()
+    {
+        _audioSource.PlayOneShot(_coinCollectClip);
+    }
     #endregion
 
 }

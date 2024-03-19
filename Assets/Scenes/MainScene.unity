@@ -363,7 +363,6 @@ MonoBehaviour:
   startPanel: {fileID: 1668981684}
   pausePanel: {fileID: 1057370462}
   pauseButton: {fileID: 1354201804}
-  startButton: {fileID: 2144391614}
 --- !u!4 &1477280883
 Transform:
   m_ObjectHideFlags: 0
@@ -406,6 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0fa3da2b76b34e489971293f0123174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _coinCollectClip: {fileID: 8300000, guid: 8906b30cd636ad149a7321b728ca7621, type: 3}
 --- !u!82 &1477280886
 AudioSource:
   m_ObjectHideFlags: 0
@@ -659,17 +659,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2144391614 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2144391614, guid: 7256a131234f1e84ebd0ed4d710035f8, type: 3}
-  m_PrefabInstance: {fileID: 4801641279428085456}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &4801641279428085456
