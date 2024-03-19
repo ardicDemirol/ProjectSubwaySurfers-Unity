@@ -6,17 +6,26 @@ public class UIManager : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private readonly GameObject inGamePanel;
+    [SerializeField] private GameObject inGamePanel;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private readonly GameObject finishPanel;
+    [SerializeField] private GameObject finishPanel;
     [SerializeField] private TextMeshProUGUI levelScoreText;
     [SerializeField] private TextMeshProUGUI maxScoreText;
+
+    [SerializeField] private GameObject startPanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject pauseButton;
+    
+    private const int _coinScore = 75;
+    private const float _scoreMultiplier = 5f;
+    
+    private bool _isPaused;
+    private bool _isPlayerDead;
 
     private float _score;
     private float _maxScore;
 
-    private bool _isPlayerDead;
 
     #endregion
 
@@ -25,12 +34,7 @@ public class UIManager : MonoBehaviour
     {
         _maxScore = PlayerPrefs.GetFloat("Score", 0f);
     }
-
-    private void OnEnable()
-    {
-        SubscribeEvents();
-    }
-
+    private void OnEnable() => SubscribeEvents();
 
     private void Update()
     {
@@ -38,7 +42,7 @@ public class UIManager : MonoBehaviour
 
         if (_score > _maxScore) scoreText.color = Color.yellow;
 
-        _score += Time.deltaTime * 5f;
+        _score += Time.deltaTime * _scoreMultiplier;
 
         StringBuilder stringBuilder = new();
         stringBuilder.Append("Score: " + (int)_score);
@@ -56,6 +60,7 @@ public class UIManager : MonoBehaviour
         Signals.Instance.OnPlayerTakeDamage += PlayerTakeDamage;
         Signals.Instance.OnPlayerDie += ControlScore;
         Signals.Instance.OnCoinCollected += CoinCollected;
+        Signals.Instance.OnGameRunning += CanvasController;
     }
 
     private void UnSubscribeEvents()
@@ -63,11 +68,12 @@ public class UIManager : MonoBehaviour
         Signals.Instance.OnPlayerTakeDamage -= PlayerTakeDamage;
         Signals.Instance.OnPlayerDie -= ControlScore;
         Signals.Instance.OnCoinCollected -= CoinCollected;
+        Signals.Instance.OnGameRunning -= CanvasController;
     }
 
     private void CoinCollected()
     {
-        _score += 75;
+        _score += _coinScore;
     }
 
     private void PlayerTakeDamage(short arg0)
@@ -89,6 +95,22 @@ public class UIManager : MonoBehaviour
         levelScoreText.text = "Level Score: " + (int)_score;
         maxScoreText.text = "Max Score: " + (int)_maxScore;
     }
+
+    private void CanvasController()
+    {
+        startPanel.SetActive(false);
+        inGamePanel.SetActive(true);
+    }
+
+    public void TogglePause()
+    {
+        pauseButton.SetActive(_isPaused);
+        pausePanel.SetActive(!_isPaused);
+        _isPaused = !_isPaused;
+        Time.timeScale = _isPaused ? 0f : 1f;
+    }
+
+
 
     #endregion
 

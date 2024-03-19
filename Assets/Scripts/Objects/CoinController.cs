@@ -10,6 +10,7 @@ public class CoinController : ObjectMovementController
         base.OnEnable();
         this.gameObject.GetComponent<MeshRenderer>().enabled = true;
     }
+
     #endregion
 
     #region Other Methods
@@ -22,6 +23,7 @@ public class CoinController : ObjectMovementController
         _moveTween = transform.DOMoveY(transform.position.y + moveDistance, rotationDuration)
             .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.Linear);
     }
+
     #endregion
 }
 
