@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameManager">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAEAAgAAAAAAAIAAAAhAAAiEA=</HashCode>
+      <FileName>Assets\Scripts\Managers\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LevelController">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgAiAAAASAAAAgAAACAAQAAAAIQAkABAEACEA=</HashCode>
+      <FileName>Assets\Scripts\Level\LevelController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LevelSpawner">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAoEAQAAIAQAAAAAAAAAAIAAEAAIAAAAAAAAAwEA=</HashCode>
+      <FileName>Assets\Scripts\Level\LevelSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CoinController">
+    <Position X="4.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Assets\Scripts\Objects\CoinController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoveableObstacleController">
+    <Position X="6" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Assets\Scripts\Objects\MoveableObstacleController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ObjectMovementController">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACABAAIAAAAAAAAgAAAAAAgAAAAIAAAACEA=</HashCode>
+      <FileName>Assets\Scripts\Objects\ObjectMovementController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonoSingleton&lt;T&gt;">
+    <Position X="1.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Others\MonoSingleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharacterController">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>yQwGAAAALCgABRQACAAEgAAACg0AIEgcaAQgBAJiCEg=</HashCode>
+      <FileName>Assets\Scripts\Player\CharacterController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoveForward">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAECAAAAQAIQAAAgAABAAAgAAIAAAABAAACAA=</HashCode>
+      <FileName>Assets\Scripts\Player\MoveForward.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Signals">
+    <Position X="2.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAIAAAAAAABQAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Signals\Signals.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIManager">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAIIIAAAAIo0QiAAAEAAAEAIADAAAIAEAABAAACEQ=</HashCode>
+      <FileName>Assets\Scripts\UI\UIManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="PlayerSide" Collapsed="true">
+    <Position X="5.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACQAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enums\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="RenderingMode" Collapsed="true">
+    <Position X="7.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Enums\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Direction">
+    <Position X="3.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Assets\Scripts\Enums\Enum.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
